@@ -1,3 +1,5 @@
+import re
+
 import getpass, requests
 from bs4 import BeautifulSoup
 from redirect_handler import find_redirect_url
@@ -88,5 +90,16 @@ except:
 	exit()
 
 response = session.get(link)
-	
-print(response.text)
+soup = BeautifulSoup(response.text, features="html.parser")
+
+### Click on (i) symbol for grades overview
+link = soup.find("a", title=re.compile(r"Leistungen"))
+if link is None or not hasattr(link, "href"):
+	print("Could not find (i) button for grades overview")
+	exit(1)
+link_url = link["href"]
+response = session.get(link_url)
+soup = BeautifulSoup(response.text, features="html.parser")
+
+
+print(soup.prettify())
