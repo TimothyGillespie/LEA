@@ -101,5 +101,29 @@ link_url = link["href"]
 response = session.get(link_url)
 soup = BeautifulSoup(response.text, features="html.parser")
 
+### Parse grades table
+# Find div that contains two tables, including the grades table
+div = soup.find("div", {"class": "content"})
+if div is None:
+	print("Could not find div with class content in grades overview")
+	exit(1)
+grade_table = div.find_all("table")[1]
+if grade_table is None:
+	print("Could not find grade table with in div")
+	exit(1)
 
-print(soup.prettify())
+# Extract grade table data
+rows = grade_table.find_all('tr')
+grade_entries = []
+COL_NAMES = ["Prüfungsnr.", "Prüfungstext", "Semester", "Note", "Status", "Bonus", "Vermerk", "Versuch"]
+for row in rows:
+	cols = row.find_all('td')
+	cols = [el.text.strip() for el in cols]
+	# Get rid of empty values
+	row = [el for el in cols]
+	if len(row) == 8 and row[-1] != "":
+		entry = dict(zip(COL_NAMES, row))
+		grade_entries.append(entry)
+
+print(grade_entries)
+#print(soup.prettify())
