@@ -1,4 +1,5 @@
 import re
+import json
 
 import getpass, requests
 from bs4 import BeautifulSoup
@@ -124,6 +125,10 @@ for row in rows:
 	if len(row) == 8 and row[-1] != "":
 		entry = dict(zip(COL_NAMES, row))
 		grade_entries.append(entry)
+
+with open("grades.json", "w") as fo:
+	json.dump(grade_entries, fo, indent=4, ensure_ascii=False)
+
 
 print(grade_entries)
 #print(soup.prettify())
