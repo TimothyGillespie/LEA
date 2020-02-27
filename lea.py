@@ -1,3 +1,6 @@
+import re
+import json
+
 import getpass, requests
 from bs4 import BeautifulSoup
 from redirect_handler import find_redirect_url
@@ -88,5 +91,44 @@ except:
 	exit()
 
 response = session.get(link)
-	
-print(response.text)
+soup = BeautifulSoup(response.text, features="html.parser")
+
+### Click on (i) symbol for grades overview
+link = soup.find("a", title=re.compile(r"Leistungen"))
+if link is None or not hasattr(link, "href"):
+	print("Could not find (i) button for grades overview")
+	exit(1)
+link_url = link["href"]
+response = session.get(link_url)
+soup = BeautifulSoup(response.text, features="html.parser")
+
+### Parse grades table
+# Find div that contains two tables, including the grades table
+div = soup.find("div", {"class": "content"})
+if div is None:
+	print("Could not find div with class content in grades overview")
+	exit(1)
+grade_table = div.find_all("table")[1]
+if grade_table is None:
+	print("Could not find grade table with in div")
+	exit(1)
+
+# Extract grade table data
+rows = grade_table.find_all('tr')
+grade_entries = []
+COL_NAMES = ["Prüfungsnr.", "Prüfungstext", "Semester", "Note", "Status", "Bonus", "Vermerk", "Versuch"]
+for row in rows:
+	cols = row.find_all('td')
+	cols = [el.text.strip() for el in cols]
+	# Get rid of empty values
+	row = [el for el in cols]
+	if len(row) == 8 and row[-1] != "":
+		entry = dict(zip(COL_NAMES, row))
+		grade_entries.append(entry)
+
+with open("grades.json", "w") as fo:
+	json.dump(grade_entries, fo, indent=4, ensure_ascii=False)
+
+
+print(grade_entries)
+#print(soup.prettify())
