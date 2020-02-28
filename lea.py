@@ -5,6 +5,7 @@ import json
 
 import klips_checker
 import lea_exceptions
+import telegram_notificator
 
 # TODO: Make configurable
 HISTORIES_PATH = "histories"
@@ -29,6 +30,10 @@ checkers = [
     klips_checker.KLIPSChecker(email, password, HISTORIES_PATH)
 ]
 
+notificators = [
+    telegram_notificator.TelegramNotificator(telegram_api_key, telegram_chat_id)
+]
+
 timer = 0
 
 while True:
@@ -38,6 +43,8 @@ while True:
                 diff_info = c.check()
                 if diff_info is not None:
                     print(diff_info)
+                    for n in notificators:
+                        n.send(str(diff_info))
                 else:
                     print("No change detected")
             except lea_exceptions.CheckingFailedException as e:
