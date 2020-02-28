@@ -9,7 +9,7 @@ class TelegramNotificator(notificator.Notificator):
 		self.api_key = api_key
 		self.chat_id = chat_id
 		
-	def send(self, message) -> bool:
+	def send(self, message: str) -> bool:
 		payload = {
 			"chat_id": self.chat_id,
 			"text": message
