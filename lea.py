@@ -7,13 +7,14 @@ import klips_checker
 import lea_exceptions
 import telegram_notificator
 
+script_path = os.path.dirname(os.path.realpath(__file__))
 # TODO: Make configurable
-HISTORIES_PATH = "histories"
+HISTORIES_PATH = os.path.join(script_path, "histories")
 
 if not os.path.exists(HISTORIES_PATH):
     os.mkdir(HISTORIES_PATH)
 
-with open("conf.json") as fo:
+with open(os.path.join(script_path, "conf.json")) as fo:
     conf = json.load(fo)
 
 email = conf["uni-email-address"]
