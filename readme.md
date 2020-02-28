@@ -3,7 +3,7 @@ LEA is short for "LEA non est acronymum" (Grammar might need correction; working
 
 # Installation
 
-Have git and python 3.7 installed then do:
+Have git and python 3.5 installed then do:
 ```
 git clone https://gitlab.uni-koblenz.de/tigill/lea.git
 
@@ -24,7 +24,7 @@ Currently it is only available with the telegram notifications. Modifications wi
 # Usage
 ```
 cd lea
-python lea.py
+python3 lea.py
 ```
 
 Enter your password. It should send an empty list "[]" now via Telegram. It will keep checking for changes and send an, yet, ugly diff. 
