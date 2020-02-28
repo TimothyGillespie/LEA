@@ -9,7 +9,6 @@ class Checker(abc.ABC):
 
     def __init__(self, histories_path: str):
         """
-        :param config: A config object that contains the values read from lea.conf
         :param histories_path: The path to the directory that is supposed to contain the history
         files that log the differences.
         """
