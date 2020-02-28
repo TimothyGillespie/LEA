@@ -4,6 +4,7 @@ import getpass
 import json
 
 import klips_checker
+import lea_exceptions
 
 # TODO: Make configurable
 HISTORIES_PATH = "histories"
@@ -33,11 +34,15 @@ timer = 0
 while True:
     for c in checkers:
         if timer % c.get_interval_length() == 0:
-            diff_info = c.check()
-            if diff_info is not None:
-                print(diff_info)
-            else:
-                print("No change detected")
+            try:
+                diff_info = c.check()
+                if diff_info is not None:
+                    print(diff_info)
+                else:
+                    print("No change detected")
+            except lea_exceptions.CheckingFailedException as e:
+                # TODO: Error handling
+                print(e)
     time.sleep(60)
     timer += 1
 
