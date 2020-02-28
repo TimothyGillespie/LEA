@@ -22,7 +22,7 @@ class KLIPSChecker(checker.Checker):
     def check(self) -> typ.Optional[typ.Any]:
         current_grade_table = self._retrieve_grades()
 
-        with open("grades.json") as fo:
+        with open(os.path.join(self._histories_path, "grades.json")) as fo:
             previous_grade_entries = json.load(fo)
 
         diff_table = klips_grades_differ.diff(previous_grade_entries, current_grade_table)
