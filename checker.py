@@ -4,22 +4,23 @@ import typing as typ
 
 class Checker(abc.ABC):
 
-    def __init__(self, config, histories_path: str):
+    # In minutes
+    INTERVAL_LENGTH = 10
+
+    def __init__(self, histories_path: str):
         """
         :param config: A config object that contains the values read from lea.conf
         :param histories_path: The path to the directory that is supposed to contain the history
         files that log the differences.
         """
-        self._config = config
         self._histories_path = histories_path
 
-    @abc.abstractmethod
-    def get_interval_length_config_key(self) -> str:
+    @staticmethod
+    def get_interval_length() -> int:
         """
-        :return The key string for the length of the time interval after which the update should be
-        repeatingly executed.
+        :return: How often the update/check should happen in minutes.
         """
-        pass
+        return Checker.INTERVAL_LENGTH
 
     @abc.abstractmethod
     def check(self) -> typ.Optional[typ.Any]:
