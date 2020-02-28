@@ -24,6 +24,7 @@ Currently it is only available with the telegram notifications. Modifications wi
 # Usage
 ```
 cd lea
+pip3 install -r requirements.txt
 python3 lea.py
 ```
 
@@ -32,3 +33,5 @@ You can also remove an entry in the `histories/grades.json`, so that on the next
 
 
 If you encounter any issue or have suggestion please create an issue here on gitlab. I will move this project to github soon, wenn I am no longer locked out of my GitHub Account.
+
+Please note that your command might not be `python3` or `pip3` but rather only `python` and `pip` depending on your technology stack.
