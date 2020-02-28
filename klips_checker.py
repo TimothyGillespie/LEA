@@ -32,7 +32,7 @@ class KLIPSChecker(checker.Checker):
         if previous_grade_entries is not None:
             diff_table = klips_grades_differ.diff(previous_grade_entries, current_grade_table)
 
-        if len(diff_table) > 0:
+        if previous_grade_entries is None or len(diff_table) > 0:
             with open(self._history_file, "w") as fo:
                 json.dump(current_grade_table, fo, indent=4, ensure_ascii=False)
             return diff_table
