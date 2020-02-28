@@ -18,17 +18,22 @@ class KLIPSChecker(checker.Checker):
         super().__init__(histories_path)
         self._klips_email = email
         self._klips_password = password
+        self._history_file = os.path.join(self._histories_path, "grades.json")
 
     def check(self) -> typ.Optional[typ.Any]:
         current_grade_table = self._retrieve_grades()
 
-        with open(os.path.join(self._histories_path, "grades.json")) as fo:
-            previous_grade_entries = json.load(fo)
+        previous_grade_entries = None
+        if os.path.exists(self._history_file):
+            with open(self._history_file) as fo:
+                previous_grade_entries = json.load(fo)
 
-        diff_table = klips_grades_differ.diff(previous_grade_entries, current_grade_table)
+        diff_table = []
+        if previous_grade_entries is not None:
+            diff_table = klips_grades_differ.diff(previous_grade_entries, current_grade_table)
 
         if len(diff_table) > 0:
-            with open(os.path.join(self._histories_path, "grades.json"), "w") as fo:
+            with open(self._history_file, "w") as fo:
                 json.dump(current_grade_table, fo, indent=4, ensure_ascii=False)
             return diff_table
         else:
