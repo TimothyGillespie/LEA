@@ -18,15 +18,19 @@ password = getpass.getpass("Enter your password: ")
 
 ### For Testing
 checkers = [
-        klips_checker.KLIPSChecker(email, password, HISTORIES_PATH)
-    ]
+    klips_checker.KLIPSChecker(email, password, HISTORIES_PATH)
+]
 
 timer = 0
 
 while True:
     for c in checkers:
         if timer % c.get_interval_length() == 0:
-            c.check()
+            diff_info = c.check()
+            if diff_info is not None:
+                print(diff_info)
+            else:
+                print("No change detected")
     time.sleep(60)
     timer += 1
 
