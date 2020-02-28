@@ -1,6 +1,7 @@
 import os
 import time
 import getpass
+import json
 
 import klips_checker
 
@@ -10,7 +11,13 @@ HISTORIES_PATH = "histories"
 if not os.path.exists(HISTORIES_PATH):
     os.mkdir(HISTORIES_PATH)
 
-email = input("Enter your email: ")
+with open("conf.json") as fo:
+    conf = json.load(fo)
+
+email = conf["uni-email-address"]
+
+telegram_api_key = conf["telegram_api_key"]
+telegram_chat_id = conf["telegram_chat_id"]
 
 # Can this be read out when running? Maybe split the password into different variables so they don't lie in one tracable register? Or a reversible encryption technique?
 password = getpass.getpass("Enter your password: ")
