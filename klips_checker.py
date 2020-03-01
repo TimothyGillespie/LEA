@@ -36,9 +36,20 @@ class KLIPSChecker(checker.Checker):
         if previous_grade_entries is None or len(diff_table) > 0:
             with open(self._history_file, "w") as fo:
                 json.dump(current_grade_table, fo, indent=4, ensure_ascii=False)
-            return diff_table
+            return self.diff_to_message(diff_table)
         else:
             return None
+
+    @staticmethod
+    def diff_to_message(diff_table: klips_grades_differ.GradeDiff):
+        msg_lines = []
+        for diffkind, entry in diff_table:
+            if diffkind == klips_grades_differ.DiffKind.ADD and entry["Note"] != "":
+                msg_lines.append("Deine Note für *" + entry["Prüfungstext"] + "* wurde eingetragen: *" + entry["Note"] + "*")
+            else:
+                prefix = "Added entry: " if diffkind == klips_grades_differ.DiffKind.ADD else "Deleted entry: "
+                msg_lines.append(prefix + str(entry))
+        return "\n".join(msg_lines)
 
     def _retrieve_grades(self):
         session = requests.Session()
