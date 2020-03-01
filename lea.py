@@ -11,9 +11,14 @@ import telegram_notificator
 script_path = os.path.dirname(os.path.realpath(__file__))
 # TODO: Make configurable
 HISTORIES_PATH = os.path.join(script_path, "histories")
+config_path = os.path.join(script_path, "conf.json")
 
 
-def run(telegram_api_key, telegram_chat_id, klips_email, klips_password):
+def run(telegram_chat_id, klips_email, klips_password):
+    with open(config_path) as fo:
+        conf = json.load(fo)
+    telegram_api_key = conf["telegram_api_key"]
+
     if not os.path.exists(HISTORIES_PATH):
         os.mkdir(HISTORIES_PATH)
 
@@ -46,19 +51,17 @@ def run(telegram_api_key, telegram_chat_id, klips_email, klips_password):
 
 
 def run_from_config():
-    with open(os.path.join(script_path, "conf.json")) as fo:
+    with open(config_path) as fo:
         conf = json.load(fo)
 
     klips_email = conf["uni-email-address"]
-
-    telegram_api_key = conf["telegram_api_key"]
     telegram_chat_id = conf["telegram_chat_id"]
 
     # Can this be read out when running? Maybe split the password into different variables so they
     # don't lie in one tracable register? Or a reversible encryption technique?
     klips_password = getpass.getpass("Enter your password: ")
 
-    run(telegram_api_key, telegram_chat_id, klips_email, klips_password)
+    run(telegram_chat_id, klips_email, klips_password)
 
 
 if __name__ == "__main__":
