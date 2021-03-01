@@ -35,3 +35,11 @@ You can also remove an entry in the `histories/grades.json`, so that on the next
 If you encounter any issue or have suggestion please create an issue here on gitlab. I will move this project to github soon, wenn I am no longer locked out of my GitHub Account.
 
 Please note that your command might not be `python3` or `pip3` but rather only `python` and `pip` depending on your technology stack.
+
+# Potential Issues
+
+When you receive an error that no module setuptools exists then use try the following command:
+
+```
+sudo apt-get install python3-setuptools
+```
